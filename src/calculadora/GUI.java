@@ -1,12 +1,9 @@
 package calculadora;
 
 import javax.swing.JFrame;
-import javax.swing.JTextField;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -16,7 +13,7 @@ import java.awt.event.ActionEvent;
  */
 public class GUI extends JFrame {
     
-    JTextField campoTexto; // campo de texto
+    Tela tela; // campo de texto
     Tecla[] teclas; // vetor contendo as teclas da calculadora
     
     /**
@@ -25,11 +22,9 @@ public class GUI extends JFrame {
     public GUI() {
         super("Calculadora"); // Define o título da janela como Calculadora
         
-        campoTexto = new JTextField(); // Campo de texto onde será escrita a expressão
-        campoTexto.setBounds(0, 0, 500, 100); // Define posicionamento e dimensões do campo de texto
-        campoTexto.setFont(new Font("Arial", Font.PLAIN, 32)); // Define o tamanho da fonte do campo de texto como 32px
-        campoTexto.setHorizontalAlignment(SwingConstants.RIGHT); // Alinha campo de texto à direita
-        add(campoTexto); // Adiciona campo de texto à janela
+        tela = new Tela(); // Tela de escrita e exibição onde será apresentada a expressão e resultado
+        tela.setBounds(0, 0, 500, 100); // Define posicionamento e dimensões da tela de exibição
+        add(tela); // Adiciona tela de exibição à janela
         
         JPanel teclado = new JPanel(); // Painel que contém as teclas
         teclado.setLayout(new GridLayout(5, 4)); // Define layout do teclado como uma Grid de 5 linhas e 4 colunas
@@ -66,7 +61,7 @@ public class GUI extends JFrame {
         add(teclado); // Adiciona painel teclado à janela
         
         setSize(516, 538); // Define tamanho da janela
-        setLayout(null); // Remove layout
+        setLayout(null); // Remove layout da janela
         setLocationRelativeTo(null); // Centraliza janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fecha janela ao clicar em sair
         setVisible(true); // Torna janela visível
@@ -78,30 +73,25 @@ public class GUI extends JFrame {
             for(Tecla tecla : teclas) { // Percorre vetor de teclas a fim de encontrar a tecla clicada
                 if(tecla == evento.getSource()) { // Testa se tal tecla é a que foi clicada
                     
-                    String textoTecla = tecla.getText(); // Armazena texto da tecla em variável
-                    String exp = campoTexto.getText(); // Armazena expressão escrita no campo de texto em variável
+                    String textoTecla = tecla.getText(); // Pega texto da tecla
                     
                     switch(textoTecla) {
                         case "=": // Caso a tecla clicada seja a de resultado (=)
-                            double resultado = Calculo.eval(exp); // Calcula o resultado da expressão
-                            if(resultado == (int) resultado) // Testa se o resultado é inteiro
-                                campoTexto.setText("" + (int) resultado); // Limpa e escreve o resultado na caixa texto sem casas decimais
-                            else
-                                campoTexto.setText("" + resultado); // Limpa e escreve o resultado na caixa texto com casas decimais
+                            tela.mostraResultado(); // Calcula resultado e apresenta na tela
                             break;
                         case "C": // Caso a tecla clicada seja a de limpeza
-                            campoTexto.setText(""); // Limpa o campo de texto
+                            tela.limpa(); // Limpa a tela
                             break;
                         case "<-": // Caso a tecla clicada seja a de backspace
-                            campoTexto.setText(exp.substring(0, exp.length() > 0 ? exp.length() - 1 : 0)); // Se o campo não estiver vazio apaga o último caractere
+                            tela.apagaUltimo(); // Apaga o último caractere
                             break;
                         default: // Caso seja um número, operador ou ponto
-                            campoTexto.setText(campoTexto.getText() + textoTecla); // Adiciona tal caractere à expressão
+                            tela.insere(textoTecla); // Adiciona tal caractere à expressão
                     }
-                    break;
+                    break; // Para a procura pela tecla
                 }
             }
-            campoTexto.requestFocus(); // Foca no campo de texto
+            tela.requestFocus(); // Leva o foco para a tela de exibição
         }
     }
 }
