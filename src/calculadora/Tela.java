@@ -3,6 +3,8 @@ package calculadora;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
 /**
  * Tela de escrita e exibição das expressões aritméticas e resultados
@@ -12,6 +14,7 @@ public class Tela extends JTextField {
     public Tela() {
         setFont(new Font("Arial", Font.PLAIN, 32)); // Define o tamanho da fonte como 32px
         setHorizontalAlignment(SwingConstants.RIGHT); // Alinha texto à direita
+        addKeyListener(new OuveTeclado()); // Adiciona evento de teclado
     }
     
     /**
@@ -48,5 +51,22 @@ public class Tela extends JTextField {
             setText("" + (int) resultado); // Limpa e escreve o resultado na tela sem casas decimais
         else
             setText("" + resultado); // Limpa e escreve o resultado na tela com casas decimais
+    }
+    
+    private class OuveTeclado implements KeyListener {
+        @Override
+        public void keyPressed(KeyEvent evento) {}
+        @Override
+        public void keyReleased(KeyEvent evento) {
+            char caractere = evento.getKeyChar(); // Pega caractere da tecla solta
+            if(caractere == '\n') { // Se a tecla for Enter
+                mostraResultado(); // Calcula resultado e apresenta na tela
+            } else if(caractere == ',') { // Se a tecla for vírgula
+                apagaUltimo(); // Apaga a vírgula
+                insere("."); // Insere ponto
+            }
+        }
+        @Override
+        public void keyTyped(KeyEvent evento) {}
     }
 }
