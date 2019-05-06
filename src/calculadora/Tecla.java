@@ -44,6 +44,6 @@ public class Tecla extends JButton {
     public Tecla(String texto, Color cor) {
         super(texto);
         setBackground(cor);
-        setFont(new Font("Arial", Font.PLAIN, 32));
+        setFont(new Font("Arial", Font.PLAIN, 32)); // Define o tamanho da fonte como 32px
     }
 }
