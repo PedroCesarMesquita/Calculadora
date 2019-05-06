@@ -51,10 +51,8 @@ public class GUI extends JFrame {
         teclas[18] = new Tecla("=", Color.cyan ); // Resultado
         teclas[19] = new Tecla("+", Color.cyan ); // Operador de adição
         
-        Evento evento = new Evento();
-        
         for(Tecla tecla : teclas) { // Percorre vetor de teclas
-            tecla.addActionListener(evento); // Adiciona evento à tecla
+            tecla.addActionListener(new OuveClique()); // Adiciona evento de clique à tecla
             teclado.add(tecla); // Adiciona tecla ao painel teclado
         }
         teclado.setBounds(0, 100, 500, 400);
@@ -67,7 +65,7 @@ public class GUI extends JFrame {
         setVisible(true); // Torna janela visível
     }
     
-    private class Evento implements ActionListener {
+    private class OuveClique implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evento) {
             for(Tecla tecla : teclas) { // Percorre vetor de teclas a fim de encontrar a tecla clicada
